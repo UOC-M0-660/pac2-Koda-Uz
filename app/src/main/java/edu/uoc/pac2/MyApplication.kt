@@ -12,8 +12,6 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        //Add book data ti firebase
-        // FirestoreBookData.addBooksDataToFirestoreDatabase()
         // TODO: Init Room Database
         // TODO: Init BooksInteractor
     }
