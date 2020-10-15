@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "779483613034",
+    "firebase_url": "https://pac2-koda-uz.firebaseio.com",
+    "project_id": "pac2-koda-uz",
+    "storage_bucket": "pac2-koda-uz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779483613034:android:5f481b24b782cd5fda4713",
+        "android_client_info": {
+          "package_name": "edu.uoc.pac2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "779483613034-j6t060junn05qla51jq5i17te6cuc4uq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE1gEXqVaOfN28oGhtQp08SWHptHPQybs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "779483613034-j6t060junn05qla51jq5i17te6cuc4uq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
