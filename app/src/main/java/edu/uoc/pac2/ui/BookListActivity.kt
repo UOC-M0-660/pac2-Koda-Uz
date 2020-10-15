@@ -10,7 +10,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
-import edu.uoc.pac2.data.BooksInteractor
 
 /**
  * An activity representing a list of Books.
@@ -56,17 +55,28 @@ class BookListActivity : AppCompatActivity() {
 
     // Get Books and Update UI
     private fun getBooks() {
-        val db = FirebaseFirestore.getInstance()
+        // Reads books from local DB
+        val myApp = this.application as MyApplication
+        val bookInteractor = myApp.getBooksInteractor()
+        val books: List<Book> = bookInteractor.getAllBooks()
+        adapter.setBooks(books)
 
-        val docRef = db.collection("books")
-        docRef.addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                Log.w(TAG, "Listen failed.", e)
-                return@addSnapshotListener
-            }
-            if (snapshot != null) {
-                val books: List<Book> = snapshot.documents.mapNotNull { it.toObject(Book::class.java) }
-                adapter.setBooks(books)
+        // Checks for internet connection
+        if (myApp.hasInternetConnection()) {
+            val db = FirebaseFirestore.getInstance()
+
+            val docRef = db.collection("books")
+            docRef.addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+                // If snapshot is received, stores book data in local DB and updates UI
+                if (snapshot != null) {
+                    val books: List<Book> = snapshot.documents.mapNotNull { it.toObject(Book::class.java) }
+                    bookInteractor.saveBooks(books)
+                    adapter.setBooks(books)
+                }
             }
         }
     }
