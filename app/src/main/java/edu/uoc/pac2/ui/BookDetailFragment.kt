@@ -1,11 +1,13 @@
 package edu.uoc.pac2.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
@@ -27,6 +29,7 @@ class BookDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Get Book for this detail screen
         loadBook()
+
     }
 
 
@@ -51,12 +54,26 @@ class BookDetailFragment : Fragment() {
             date.text = book.publicationDate
             description.text = book.description
             Picasso.get().load(book.urlImage).into(image)
+
+            // Setup share button
+            val shareButton = activity?.findViewById<FloatingActionButton>(R.id.fab)
+            shareButton?.setOnClickListener {
+                shareContent(book)
+            }
         }
     }
 
-    // TODO: Share Book Title and Image URL
+    // Share Book Title and Image URL
     private fun shareContent(book: Book) {
-        throw NotImplementedError()
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "Check out this awesome book: ${book.title} ${book.urlImage}")
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+
     }
 
     companion object {

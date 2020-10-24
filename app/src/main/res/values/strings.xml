@@ -7,4 +7,5 @@
 
     <string name="book_not_found">Book not found</string>
     <string name="book_picture">Book picture</string>
+    <string name="share_button">Share button</string>
 </resources>
