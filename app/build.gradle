@@ -62,4 +62,6 @@ dependencies {
     // Image Loading Library
     implementation 'com.squareup.picasso:picasso:2.71828'
     // Other Libraries
+    // Adverts
+    implementation 'com.google.android.gms:play-services-ads:19.5.0'
 }

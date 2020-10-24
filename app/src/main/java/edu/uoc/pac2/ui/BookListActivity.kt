@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
@@ -20,6 +22,7 @@ class BookListActivity : AppCompatActivity() {
 
     private lateinit var adapter: BooksListAdapter
     private lateinit var myApp: MyApplication
+    private lateinit var adView: AdView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,11 @@ class BookListActivity : AppCompatActivity() {
 
         // Add books data to Firestore [Use once for new projects with empty Firestore Database]
         // FirestoreBookData.addBooksDataToFirestoreDatabase()
+
+        // Setup AdView
+        adView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest )
     }
 
     // Init Top Toolbar

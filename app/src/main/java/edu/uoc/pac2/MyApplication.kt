@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import androidx.room.Room
+import com.google.android.gms.ads.MobileAds
 import edu.uoc.pac2.data.*
 
 /**
@@ -23,6 +24,9 @@ class MyApplication : Application() {
 
         // BooksInteractor
         booksInteractor = BooksInteractor(db.bookDao())
+
+        //MobileAds
+        MobileAds.initialize(this)
     }
 
     fun getBooksInteractor(): BooksInteractor {
