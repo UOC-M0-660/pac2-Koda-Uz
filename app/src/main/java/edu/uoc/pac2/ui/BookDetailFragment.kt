@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -12,6 +13,7 @@ import com.squareup.picasso.Picasso
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
+import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.fragment_book_detail.*
 
 /**
@@ -49,11 +51,12 @@ class BookDetailFragment : Fragment() {
     private fun initUI(book: Book?) {
         book?.let {
             var toolbar = activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsing_toolbar_layout)
+            var toolbarImage = activity?.findViewById<ImageView>(R.id.toolbar_image)
             toolbar?.title = book.title
             author.text = book.author
             date.text = book.publicationDate
             description.text = book.description
-            Picasso.get().load(book.urlImage).into(image)
+            Picasso.get().load(book.urlImage).into(toolbarImage)
 
             // Setup share button
             val shareButton = activity?.findViewById<FloatingActionButton>(R.id.fab)

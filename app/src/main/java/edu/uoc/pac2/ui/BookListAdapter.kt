@@ -1,5 +1,6 @@
 package edu.uoc.pac2.ui
 
+import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ class BooksListAdapter(private var books: List<Book>) : RecyclerView.Adapter<Boo
                 putExtra(BookDetailFragment.ARG_ITEM_ID, book.uid)
             }
             v.context.startActivity(intent)
+            (v.context as Activity).overridePendingTransition(R.anim.translate_in_bottom, R.anim.activity_stay);
         }
     }
 

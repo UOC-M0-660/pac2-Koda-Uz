@@ -1,5 +1,6 @@
 package edu.uoc.pac2.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -39,24 +40,21 @@ class BookDetailActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: Override finish animation for actionbar back arrow
-    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
-    }*/
+    // Override finish animation for actionbar back arrow
     override fun onOptionsItemSelected(item: MenuItem) =
             when (item.itemId) {
                 android.R.id.home -> {
-
-                    this.finish()
-
+                    finish()
+                    overridePendingTransition(0, R.anim.translate_out_top)
                     true
                 }
                 else -> super.onOptionsItemSelected(item)
             }
 
-    // TODO: Override finish animation for phone back button
+    // Override finish animation for phone back button
     override fun onBackPressed() {
         super.onBackPressed()
+        overridePendingTransition(0, R.anim.translate_out_top)
     }
 
 }
