@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import edu.uoc.pac2.R
+import kotlinx.android.synthetic.main.activity_book_detail.*
 
 /**
  * An activity representing a single Book detail screen.
@@ -13,6 +14,10 @@ class BookDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_detail)
+
+        //Action bar
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -35,9 +40,19 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     // TODO: Override finish animation for actionbar back arrow
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return super.onOptionsItemSelected(item)
-    }
+    }*/
+    override fun onOptionsItemSelected(item: MenuItem) =
+            when (item.itemId) {
+                android.R.id.home -> {
+
+                    this.finish()
+
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
 
     // TODO: Override finish animation for phone back button
     override fun onBackPressed() {

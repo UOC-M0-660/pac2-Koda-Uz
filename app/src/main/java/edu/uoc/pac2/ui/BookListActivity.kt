@@ -19,6 +19,7 @@ class BookListActivity : AppCompatActivity() {
     private val TAG = "BookListActivity"
 
     private lateinit var adapter: BooksListAdapter
+    private lateinit var myApp: MyApplication
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,9 @@ class BookListActivity : AppCompatActivity() {
         // Init UI
         initToolbar()
         initRecyclerView()
+
+        // Init myApp
+        myApp = this.application as MyApplication
 
         // Get Books
         getBooks()
@@ -56,10 +60,7 @@ class BookListActivity : AppCompatActivity() {
     // Get Books and Update UI
     private fun getBooks() {
         // Reads books from local DB
-        val myApp = this.application as MyApplication
-        val bookInteractor = myApp.getBooksInteractor()
-        val books: List<Book> = bookInteractor.getAllBooks()
-        adapter.setBooks(books)
+        loadBooksFromLocalDb()
 
         // Checks for internet connection
         if (myApp.hasInternetConnection()) {
@@ -74,20 +75,23 @@ class BookListActivity : AppCompatActivity() {
                 // If snapshot is received, stores book data in local DB and updates UI
                 if (snapshot != null) {
                     val books: List<Book> = snapshot.documents.mapNotNull { it.toObject(Book::class.java) }
-                    bookInteractor.saveBooks(books)
-                    adapter.setBooks(books)
+                    saveBooksToLocalDatabase(books)
                 }
             }
         }
     }
 
-    // TODO: Load Books from Room
+    // Load Books from Room
     private fun loadBooksFromLocalDb() {
-        throw NotImplementedError()
+        val bookInteractor = myApp.getBooksInteractor()
+        val books: List<Book> = bookInteractor.getAllBooks()
+        adapter.setBooks(books)
     }
 
-    // TODO: Save Books to Local Storage
+    // Save Books to Local Storage
     private fun saveBooksToLocalDatabase(books: List<Book>) {
-        throw NotImplementedError()
+        val bookInteractor = myApp.getBooksInteractor()
+        bookInteractor.saveBooks(books)
+        adapter.setBooks(books)
     }
 }

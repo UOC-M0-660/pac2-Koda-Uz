@@ -19,6 +19,19 @@ class BooksListAdapter(private var books: List<Book>) : RecyclerView.Adapter<Boo
     private val evenViewType = 0
     private val oddViewType = 1
 
+    private val onClickListener: View.OnClickListener
+
+    init {
+        onClickListener = View.OnClickListener { v ->
+            val book = v.tag as Book
+
+            val intent = Intent(v.context, BookDetailActivity::class.java).apply {
+                putExtra(BookDetailFragment.ARG_ITEM_ID, book.uid)
+            }
+            v.context.startActivity(intent)
+        }
+    }
+
     private fun getBook(position: Int): Book {
         return books[position]
     }
@@ -61,7 +74,11 @@ class BooksListAdapter(private var books: List<Book>) : RecyclerView.Adapter<Boo
         holder.titleView.text = book.title
         holder.authorView.text = book.author
 
-        // TODO: Set View Click Listener
+        // Set View Click Listener
+        with(holder.itemView) {
+            tag = book
+            setOnClickListener(onClickListener)
+        }
     }
 
     // Returns total items in Adapter
