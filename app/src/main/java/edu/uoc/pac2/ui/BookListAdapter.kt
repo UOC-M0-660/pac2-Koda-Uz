@@ -20,30 +20,42 @@ class BooksListAdapter(private var books: List<Book>) : RecyclerView.Adapter<Boo
     private val evenViewType = 0
     private val oddViewType = 1
 
+    // OnClickListener for RecyclerView rows
     private val onClickListener: View.OnClickListener
 
     init {
         onClickListener = View.OnClickListener { v ->
             val book = v.tag as Book
 
+            // Creates intent with book uid as an extra
             val intent = Intent(v.context, BookDetailActivity::class.java).apply {
                 putExtra(BookDetailFragment.ARG_ITEM_ID, book.uid)
             }
+            // Starts new activity with translation animation from bottom to top
             v.context.startActivity(intent)
             (v.context as Activity).overridePendingTransition(R.anim.translate_in_bottom, R.anim.activity_stay);
         }
     }
 
+    /**
+     * Returns book at selected position
+     */
     private fun getBook(position: Int): Book {
         return books[position]
     }
 
+    /**
+     * Changes array of books and refreshes UI
+     */
     fun setBooks(books: List<Book>) {
         this.books = books
         // Reloads the RecyclerView with new adapter data
         notifyDataSetChanged()
     }
 
+    /**
+     * Returns view type ever or odd
+     */
     override fun getItemViewType(position: Int): Int {
         return if (position % 2 == 0) {
             evenViewType

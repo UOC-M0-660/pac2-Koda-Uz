@@ -5,8 +5,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import androidx.room.Room
-import com.google.android.gms.ads.MobileAds
 import edu.uoc.pac2.data.*
+
+/**
+ * Álvaro Pérez Gómez
+ */
 
 /**
  * Entry point for the Application.
@@ -24,15 +27,18 @@ class MyApplication : Application() {
 
         // BooksInteractor
         booksInteractor = BooksInteractor(db.bookDao())
-
-        //MobileAds
-        MobileAds.initialize(this)
     }
 
+    /**
+     * Returns Book Interactor
+     */
     fun getBooksInteractor(): BooksInteractor {
         return booksInteractor
     }
 
+    /**
+     * Checks for internet connection
+     */
     fun hasInternetConnection(): Boolean {
         val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo

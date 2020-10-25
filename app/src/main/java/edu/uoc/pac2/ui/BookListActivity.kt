@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
@@ -42,6 +43,7 @@ class BookListActivity : AppCompatActivity() {
         // FirestoreBookData.addBooksDataToFirestoreDatabase()
 
         // Setup AdView
+        MobileAds.initialize(this)
         adView = findViewById(R.id.adView)
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest )
@@ -89,14 +91,14 @@ class BookListActivity : AppCompatActivity() {
         }
     }
 
-    // Load Books from Room
+    // Load Books from Room local DB
     private fun loadBooksFromLocalDb() {
         val bookInteractor = myApp.getBooksInteractor()
         val books: List<Book> = bookInteractor.getAllBooks()
         adapter.setBooks(books)
     }
 
-    // Save Books to Local Storage
+    // Save Books to Room Local Storage
     private fun saveBooksToLocalDatabase(books: List<Book>) {
         val bookInteractor = myApp.getBooksInteractor()
         bookInteractor.saveBooks(books)

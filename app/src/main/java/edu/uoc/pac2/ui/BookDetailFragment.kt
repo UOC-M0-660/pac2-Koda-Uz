@@ -31,7 +31,6 @@ class BookDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Get Book for this detail screen
         loadBook()
-
     }
 
 
@@ -56,6 +55,7 @@ class BookDetailFragment : Fragment() {
             author.text = book.author
             date.text = book.publicationDate
             description.text = book.description
+            // Loads image with Picasso module
             Picasso.get().load(book.urlImage).into(toolbarImage)
 
             // Setup share button
@@ -68,12 +68,14 @@ class BookDetailFragment : Fragment() {
 
     // Share Book Title and Image URL
     private fun shareContent(book: Book) {
+        // Implicit intent
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, "Check out this awesome book: ${book.title} ${book.urlImage}")
             type = "text/plain"
         }
 
+        // Crates chooser menu for user to select an app to share
         val shareIntent = Intent.createChooser(sendIntent, null)
         startActivity(shareIntent)
 
