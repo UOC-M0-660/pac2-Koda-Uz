@@ -22,6 +22,8 @@ class MyApplication : Application() {
         super.onCreate()
         // Init Room Database
         // Uses allowMainThreadQueries
+        // This is not ideal for large scale DB because it can halt the main thread
+        // For this app works with no issues
         val db = Room.databaseBuilder(this, ApplicationDatabase::class.java,
                 "basedatos-app").allowMainThreadQueries().build()
 
