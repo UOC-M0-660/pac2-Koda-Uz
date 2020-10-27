@@ -1,7 +1,6 @@
 package edu.uoc.pac2.ui
 
 import android.app.Activity
-import android.app.ActivityOptions
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View

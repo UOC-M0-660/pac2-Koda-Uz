@@ -1,6 +1,7 @@
 package edu.uoc.pac2.ui
 
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ import com.squareup.picasso.Picasso
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
-import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.fragment_book_detail.*
 
 /**
@@ -21,6 +21,8 @@ import kotlinx.android.synthetic.main.fragment_book_detail.*
  * This fragment is contained in a [BookDetailActivity].
  */
 class BookDetailFragment : Fragment() {
+
+    private var _book: Book? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -36,14 +38,26 @@ class BookDetailFragment : Fragment() {
 
     // Get Book for the given {@param ARG_ITEM_ID} Book id
     private fun loadBook() {
-        val myApp = activity?.application as MyApplication
-        val booksInteractor = myApp.getBooksInteractor()
-        arguments?.let {
-            if (it.containsKey(ARG_ITEM_ID)) {
-                val book = booksInteractor.getBookById(it.getInt(ARG_ITEM_ID))
-                initUI(book)
+        // Async Task
+        class LoadBook: AsyncTask<Void, Void, Void>() {
+            // Background query to Room DB
+            override fun doInBackground(vararg params: Void?): Void? {
+                val myApp = activity?.application as MyApplication
+                val booksInteractor = myApp.getBooksInteractor()
+                arguments?.let {
+                    if (it.containsKey(ARG_ITEM_ID)) {
+                        _book = booksInteractor.getBookById(it.getInt(ARG_ITEM_ID))
+                    }
+                }
+                return null
+            }
+
+            // Task callback, will be executed on main thread
+            override fun onPostExecute(result: Void?) {
+                initUI(_book)
             }
         }
+        LoadBook().execute()
     }
 
     // Init UI with book details

@@ -1,5 +1,6 @@
 package edu.uoc.pac2.ui
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -45,8 +46,12 @@ class BookListActivity : AppCompatActivity() {
         // Setup AdView
         MobileAds.initialize(this)
         adView = findViewById(R.id.adView)
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest )
+        // Configures emulator to receive test ads
+        // Calls to addTestDevice should be removed before publishing
+        val adRequest = AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build()
+        adView.loadAd(adRequest)
     }
 
     // Init Top Toolbar
@@ -91,17 +96,44 @@ class BookListActivity : AppCompatActivity() {
         }
     }
 
-    // Load Books from Room local DB
+    // Load Books from Room local DB with Async task in background
     private fun loadBooksFromLocalDb() {
-        val bookInteractor = myApp.getBooksInteractor()
-        val books: List<Book> = bookInteractor.getAllBooks()
-        adapter.setBooks(books)
+        var books: List<Book> = ArrayList()
+        // AsycncTask
+        class LoadBooks: AsyncTask<Void, Void, Void>() {
+            // Background query to Room DB
+            override fun doInBackground(vararg params: Void?): Void? {
+                val bookInteractor = myApp.getBooksInteractor()
+                books = bookInteractor.getAllBooks()
+                return null
+            }
+
+            // Task callback, will be executed on main thread
+            override fun onPostExecute(result: Void?) {
+                super.onPostExecute(result)
+                adapter.setBooks(books)
+            }
+        }
+        LoadBooks().execute()
     }
 
-    // Save Books to Room Local Storage
+    // Save Books to Room Local Storage with Async task in background
     private fun saveBooksToLocalDatabase(books: List<Book>) {
-        val bookInteractor = myApp.getBooksInteractor()
-        bookInteractor.saveBooks(books)
-        adapter.setBooks(books)
+        // AsycncTasks
+        class SaveBooks: AsyncTask<Void, Void, Void>() {
+            // Background query to Room DB
+            override fun doInBackground(vararg params: Void?): Void? {
+                val bookInteractor = myApp.getBooksInteractor()
+                bookInteractor.saveBooks(books)
+                return null
+            }
+
+            // Task callback, will be executed on main thread
+            override fun onPostExecute(result: Void?) {
+                super.onPostExecute(result)
+                adapter.setBooks(books)
+            }
+        }
+        SaveBooks().execute()
     }
 }
