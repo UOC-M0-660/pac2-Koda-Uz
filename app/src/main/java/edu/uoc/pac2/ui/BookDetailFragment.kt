@@ -1,18 +1,28 @@
 package edu.uoc.pac2.ui
 
+import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
+import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
+import kotlinx.android.synthetic.main.fragment_book_detail.*
 
 /**
  * A fragment representing a single Book detail screen.
  * This fragment is contained in a [BookDetailActivity].
  */
 class BookDetailFragment : Fragment() {
+
+    private var _book: Book? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -26,19 +36,63 @@ class BookDetailFragment : Fragment() {
     }
 
 
-    // TODO: Get Book for the given {@param ARG_ITEM_ID} Book id
+    // Get Book for the given {@param ARG_ITEM_ID} Book id
     private fun loadBook() {
-        throw NotImplementedError()
+        // Async Task
+        class LoadBook: AsyncTask<Void, Void, Void>() {
+            // Background query to Room DB
+            override fun doInBackground(vararg params: Void?): Void? {
+                val myApp = activity?.application as MyApplication
+                val booksInteractor = myApp.getBooksInteractor()
+                arguments?.let {
+                    if (it.containsKey(ARG_ITEM_ID)) {
+                        _book = booksInteractor.getBookById(it.getInt(ARG_ITEM_ID))
+                    }
+                }
+                return null
+            }
+
+            // Task callback, will be executed on main thread
+            override fun onPostExecute(result: Void?) {
+                initUI(_book)
+            }
+        }
+        LoadBook().execute()
     }
 
-    // TODO: Init UI with book details
-    private fun initUI(book: Book) {
-        throw NotImplementedError()
+    // Init UI with book details
+    private fun initUI(book: Book?) {
+        book?.let {
+            var toolbar = activity?.findViewById<CollapsingToolbarLayout>(R.id.collapsing_toolbar_layout)
+            var toolbarImage = activity?.findViewById<ImageView>(R.id.toolbar_image)
+            toolbar?.title = book.title
+            author.text = book.author
+            date.text = book.publicationDate
+            description.text = book.description
+            // Loads image with Picasso module
+            Picasso.get().load(book.urlImage).into(toolbarImage)
+
+            // Setup share button
+            val shareButton = activity?.findViewById<FloatingActionButton>(R.id.fab)
+            shareButton?.setOnClickListener {
+                shareContent(book)
+            }
+        }
     }
 
-    // TODO: Share Book Title and Image URL
+    // Share Book Title and Image URL
     private fun shareContent(book: Book) {
-        throw NotImplementedError()
+        // Implicit intent
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "Check out this awesome book: ${book.title} ${book.urlImage}")
+            type = "text/plain"
+        }
+
+        // Crates chooser menu for user to select an app to share
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+
     }
 
     companion object {
